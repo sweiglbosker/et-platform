@@ -417,6 +417,51 @@ set(SOFTFLOAT_SOURCES
     softfloat/ui64_to_f64.c
 )
 
+#
+# Erbium
+#
+
+add_library(sw-erbium)
+add_library(sw-sysemu::sw-erbium ALIAS sw-erbium)
+target_sources(sw-erbium PRIVATE
+    ${CORE_SYSEMU_SOURCES}
+    ${SOFTFLOAT_SOURCES}
+    # SW wrapper
+)
+target_include_directories(sw-erbium
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/sw-sysemu/include/sw-sysemu>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/sw-sysemu/include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    PRIVATE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/sys_emu>
+)
+target_compile_definitions(sw-erbium
+    PUBLIC
+        SYS_EMU
+    PRIVATE
+        ERBIUM
+        $<$<BOOL:${BACKTRACE}>:BACKTRACE=1>
+        $<$<BOOL:${BENCHMARKS}>:BENCHMARKS=1>
+        $<$<BOOL:${PRELOAD_LZ4}>:PRELOAD_LZ4=1>
+        $<$<BOOL:${SDK_RELEASE}>:SDK_RELEASE=1>
+)
+target_compile_features(sw-erbium PUBLIC cxx_std_17)
+target_compile_options(sw-erbium PRIVATE -Wall -Wextra -pedantic-errors -Werror -Wno-implicit-fallthrough -Wno-sign-compare)
+target_link_libraries(sw-erbium
+    PRIVATE
+        $<$<BOOL:${BACKTRACE}>:libunwind::libunwind>
+        lz4::lz4
+        glog::glog
+        $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0.0>>:stdc++fs>
+)
+target_link_options(sw-erbium PRIVATE LINKER:-Bsymbolic)
+
+#
+# ETSOC1
+#
+
 add_library(sw-sysemu)
 add_library(sw-sysemu::sw-sysemu ALIAS sw-sysemu)
 target_sources(sw-sysemu PRIVATE
