@@ -427,6 +427,8 @@ add_library(sw-sysemu::sw-erbium ALIAS sw-erbium)
 target_sources(sw-erbium PRIVATE
     ${CORE_SYSEMU_SOURCES}
     ${SOFTFLOAT_SOURCES}
+    # Erbium-specific sources
+    devices/sysregs_er.cpp
     # SW wrapper
 )
 target_include_directories(sw-erbium

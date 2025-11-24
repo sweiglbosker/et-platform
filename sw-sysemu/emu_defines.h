@@ -33,6 +33,7 @@ namespace bemu {
 #define EMU_NUM_MINIONS         (EMU_NUM_MINION_SHIRES * EMU_MINIONS_PER_SHIRE)
 #define EMU_NUM_THREADS         (EMU_NUM_MINION_SHIRES * EMU_THREADS_PER_SHIRE)
 
+#define EMU_HAS_WDT 1
 #define EMU_HAS_L2 0
 #define EMU_HAS_SVCPROC 0
 #define EMU_HAS_MEMSHIRE 0
@@ -41,7 +42,7 @@ namespace bemu {
 #define EMU_HAS_PMA 0
 #define EMU_HAS_PTW 0
 
-// Main memory size (16Mb of MRAM)
+// Main memory size (16MB of MRAM)
 #define EMU_DRAM_SIZE  (16ULL*1024ULL*1024ULL)
 
 #elif EMU_ETSOC1

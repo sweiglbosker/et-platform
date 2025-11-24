@@ -34,6 +34,7 @@ struct Warning {
         esrs = 1 << 4, // Undefined ESRs
         cacheops = 1 << 5, // Cache operations
         debug = 1 << 6, // Debug infrastructure
+        erbium_regs = 1 << 7, // Erbium system registers
         all = -1,
     };
 
@@ -505,6 +506,11 @@ inline int System::spio_uart1_get_tx_fd() const
 
 inline void System::tick_peripherals(uint64_t cycle)
 {
+#if EMU_HAS_WDT
+    // Watchdog timer (handles its own clock divider internally)
+    memory.wdt_clock_tick(noagent, cycle);
+#endif
+
     // cycle at 1GHz, timer clock at 10MHz
     if ((cycle % 100) == 0) {
 
