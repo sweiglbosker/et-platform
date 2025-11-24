@@ -567,7 +567,7 @@ void System::load_elf(std::istream& stream)
     ELFIO::elfio elf;
     elf.load(stream);
     for (const ELFIO::segment* seg : elf.segments) {
-        if (!(seg->get_type() & PT_LOAD))
+        if (seg->get_type() != PT_LOAD)
             continue;
 
         LOG_AGENT(INFO, noagent, "Segment[%d] VA: 0x%" PRIx64 "\tType: 0x%" PRIx32 " (LOAD)",
