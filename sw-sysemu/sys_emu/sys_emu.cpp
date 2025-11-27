@@ -406,16 +406,8 @@ sys_emu::sys_emu(const sys_emu_cmd_options &cmd_options, api_communicate *api_co
     }
 
     // Reset the cold-reset part of the system
-    for (unsigned shire = 0; shire < EMU_NUM_SHIRES; ++shire) {
-        chip.cold_reset(shire);
-    }
-    chip.cold_reset_mindm();
-#if EMU_HAS_SVCPROC
-    chip.cold_reset_spdm();
-#endif
-#if EMU_HAS_MEMSHIRE
-    chip.cold_reset_memshire();
-#endif
+    chip.cold_reset();
+
 
     // Configure the simulation parameters
     for (unsigned shire = 0; shire < EMU_NUM_MINION_SHIRES; ++shire) {

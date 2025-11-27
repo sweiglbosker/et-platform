@@ -99,8 +99,7 @@ void System::end_warm_reset(unsigned shire)
     recalculate_thread1_enable(shire);
 }
 
-
-void System::cold_reset(unsigned shire)
+void System::cold_reset_shire(unsigned shire)
 {
     unsigned s = shireindex(shire);
     unsigned ncount = shireindex_neighs(s);
@@ -119,30 +118,29 @@ void System::cold_reset(unsigned shire)
 }
 
 
-void System::cold_reset_mindm()
+void System::cold_reset(void)
 {
+    for (unsigned shire = 0; shire < EMU_NUM_SHIRES; ++shire) {
+        cold_reset_shire(shire);
+    }
+
+    // Cold-reset Minion debug.
     for (unsigned s = 0; s < EMU_NUM_COMPUTE_SHIRES; ++s) {
         debug_reset(s);
     }
     dmctrl = 0;
-}
-
 
 #if EMU_HAS_SVCPROC
-void System::cold_reset_spdm()
-{
+    // Cold-reset SP debug.
     debug_reset(EMU_IO_SHIRE_SP);
-    spdmctrl = 0;
-}
-#endif // EMU_HAS_SVCPROC
+    spdmctrl = 0;    
+#endif
 
 #if EMU_HAS_MEMSHIRE
-void System::cold_reset_memshire()
-{
+    // Cold-reset memshire.
     mem_shire_esrs.cold_reset();
+#endif
 }
-#endif // EMU_HAS_MEMSHIRE
-
 
 void System::raise_machine_timer_interrupt(unsigned shire)
 {

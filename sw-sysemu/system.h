@@ -122,14 +122,7 @@ public:
     void debug_reset(unsigned shire);
     void begin_warm_reset(unsigned shire);
     void end_warm_reset(unsigned shire);
-    void cold_reset(unsigned shire);
-    void cold_reset_mindm();
-#if EMU_HAS_SVCPROC
-    void cold_reset_spdm();
-#endif
-#if EMU_HAS_MEMSHIRE
-    void cold_reset_memshire();
-#endif
+    void cold_reset(void);
 
     uint64_t get_csr(unsigned thread, uint16_t cnum);
     void set_csr(unsigned thread, uint16_t cnum, uint64_t data);
@@ -317,6 +310,9 @@ private:
     uint16_t calculate_andortree1(unsigned shire) const;
 #endif
     bool should_halt_on_reset(const Hart& cpu) const;
+
+    // Reset helpers
+    void cold_reset_shire(unsigned shire);
 
     // Message ports
     void write_msg_port_data_to_scp(Hart& cpu, unsigned id, uint32_t *data, uint8_t oob);
