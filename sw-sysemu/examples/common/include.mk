@@ -3,12 +3,14 @@
 
 # Set to show compile commands
 VERBOSE        ?= 0
-# Address for _boot symbol / start PC
-BOOT_ADDR      ?= 0x8000001000
-# Top of the stack
-STACK_TOP      ?= 0x80A1FFC000 
+# ETSOC1
+ETSOC1_BOOT_ADDR      ?= 0x8000001000
+ETSOC1_STACK_TOP      ?= 0x80A1FFC000
+# ERBIUM
+ERBIUM_BOOT_ADDR      ?= 0x0040000000
+ERBIUM_STACK_TOP      ?= 0x0042002000
 # Architecture / ABI
-MINION_MARCH   ?= rv64imf
+MINION_MARCH   ?= rv64imfc
 MINION_MABI    ?= lp64f
 # Enable features (not recommended)
 USE_EXCEPTIONS ?= 0
@@ -76,7 +78,8 @@ CXXFLAGS += $(CXXFLAGS_RTTI_$(USE_RTTI))
 CXXFLAGS += $(CXXFLAGS_EXCEPTIONS_$(USE_EXCEPTIONS))
 
 # Linker flags
-LDFLAGS += -Wl,--section-start=bootrom=$(BOOT_ADDR),--section-start=stack=$(STACK_TOP)
+ETSOC1_LDFLAGS += -Wl,--section-start=bootrom=$(ETSOC1_BOOT_ADDR),--section-start=stack=$(ETSOC1_STACK_TOP)
+ERBIUM_LDFLAGS += -Wl,--section-start=bootrom=$(ERBIUM_BOOT_ADDR),--section-start=stack=$(ERBIUM_STACK_TOP) -Tcommon/erbium.ld
 
 # Assembly sources
 EXTRA_SRCS = $(BOOT_SRC)
@@ -102,9 +105,12 @@ $(BUILD_DIR)/objs/%.cc.o: %.cc
 	@mkdir -p $(@D)
 	$(ECHO)$(CXX) $(CPPFLAGS) $(CXXFLAGS) -MMD -MP -c -o $@ $<
 
-$(BUILD_DIR)/%.elf: $(EXTRA_SRCS)
+$(BUILD_DIR)/etsoc1_%.elf: $(EXTRA_SRCS)
 	@echo "-- Linking $@"
 	@mkdir -p $(@D)
-	$(ECHO)$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
+	$(ECHO)$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $(ETSOC1_LDFLAGS) -o $@ $^
 
-
+$(BUILD_DIR)/erbium_%.elf: $(EXTRA_SRCS)
+	@echo "-- Linking $@"
+	@mkdir -p $(@D)
+	$(ECHO)$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $(ERBIUM_LDFLAGS) -o $@ $^

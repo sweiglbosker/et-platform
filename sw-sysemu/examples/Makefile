@@ -8,7 +8,7 @@ include common/include.mk
 CPPFLAGS += -Icommon
 
 # Custom variables
-target = $(BUILD_DIR)/test.elf
+target = $(BUILD_DIR)/etsoc1_test.elf $(BUILD_DIR)/erbium_test.elf
 srcs = src/test.c
 objs = $(srcs:%=$(BUILD_DIR)/objs/%.o)
 deps = $(objs:%.o=%.d)
