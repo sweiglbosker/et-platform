@@ -4,6 +4,7 @@
 *-------------------------------------------------------------------------*/
 
 #include "emu_defines.h"
+#include "devices/sysregs_er.h"
 #include "system.h"
 #include "memory/sysreg_region.h"
 #include "memory/dense_region.h"
@@ -18,8 +19,14 @@ void MainMemory::reset()
     regions[pos++].reset(new DenseRegion<dram_base, 16_MiB>());
     regions[pos++].reset(new DenseRegion<bootrom_base, 8_KiB, false>());
     regions[pos++].reset(new DenseRegion<sram_base, 8_KiB>());
-    regions[pos++].reset(new DenseRegion<erbreg_base, 64_KiB>());
+    regions[pos++].reset(new SysregsEr<erbreg_base>());
     regions[pos++].reset(new SysregRegion<sysreg_base, 4_GiB>());
 }
 
+void MainMemory::wdt_clock_tick(const Agent& agent, uint64_t cycle)
+{
+    auto ptr = dynamic_cast<SysregsEr<erbreg_base>*>(regions[3].get());
+    ptr->wdt_clock_tick(agent, cycle);
 }
+
+} // namespace bemu

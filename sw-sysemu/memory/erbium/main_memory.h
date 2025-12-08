@@ -89,6 +89,8 @@ struct MainMemory {
         (*lo)->dump_data(agent, os, pos, addr + n - (*lo)->first() - pos);
     }
 
+    void wdt_clock_tick(const Agent& agent, uint64_t cycle);
+
 protected:
     static inline bool above(const std::unique_ptr<MemoryRegion>& lhs, addr_type rhs) {
         return lhs->last() < rhs;

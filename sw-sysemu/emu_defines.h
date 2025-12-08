@@ -33,14 +33,16 @@ namespace bemu {
 #define EMU_NUM_MINIONS         (EMU_NUM_MINION_SHIRES * EMU_MINIONS_PER_SHIRE)
 #define EMU_NUM_THREADS         (EMU_NUM_MINION_SHIRES * EMU_THREADS_PER_SHIRE)
 
+#define EMU_HAS_WDT 1
 #define EMU_HAS_L2 0
 #define EMU_HAS_SVCPROC 0
 #define EMU_HAS_MEMSHIRE 0
 #define EMU_HAS_SPIO 0
 #define EMU_HAS_PU 0
 #define EMU_HAS_PMA 0
+#define EMU_HAS_PTW 0
 
-// Main memory size (16Mb of MRAM)
+// Main memory size (16MB of MRAM)
 #define EMU_DRAM_SIZE  (16ULL*1024ULL*1024ULL)
 
 #elif EMU_ETSOC1
@@ -115,6 +117,13 @@ namespace bemu {
 #define EMU_HAS_PMA 1
 
 //
+// PTW Configuration
+//
+// Note: ET-SOC-1 PTW is presumably broken, but is left
+// enabled in the emulator to support the code that expects it.
+#define EMU_HAS_PTW 1
+
+//
 // Main memory size (up to 32GiB)
 //
 #define EMU_DRAM_SIZE  (32ULL*1024ULL*1024ULL*1024ULL)
@@ -144,6 +153,7 @@ namespace bemu {
 #define EMU_NUM_FCC_COUNTERS_PER_THREAD 2
 
 // VA to PA translation
+// TODO: Different for Erbium.
 #define PA_SIZE        40
 #define PA_M           ((((uint64_t)1) << PA_SIZE) - 1)
 #define VA_SIZE        48
