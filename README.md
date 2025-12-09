@@ -27,7 +27,7 @@ The main software components are:
   - [`device-layer`](https://github.com/aifoundry-org/et-platform/tree/master/devicelayer): The Device Abstraction Library.
   - [`sw-sysemu`](https://github.com/aifoundry-org/et-platform/tree/master/sw-sysemu): A Software Simulator for the ETSOC1.
   - [`et-driver`](https://github.com/aifoundry-org/et-platform/tree/master/et-driver): The ETSOC1 Linux Kernel Driver.
-  - [`device-bootloaders`](https://github.com/aifoundry-org/et-platform/tree/master/et-driver): The Service Processor Firmware.
+  - [`device-bootloaders`](https://github.com/aifoundry-org/et-platform/tree/master/device-bootloaders): The Service Processor Firmware.
   - [`device-api`](https://github.com/aifoundry-org/et-platform/tree/master/device-api): The low level Interface between Host and ETSOC1.
   - [`device-minion-runtime`](https://github.com/aifoundry-org/et-platform/tree/master/device-minion-runtime): Machine and Supervisor Mode Software running on compute minions.
   - [`device-management-application`](https://github.com/aifoundry-org/et-platform/tree/master/device-management-application): Utilities to manage and monitor the ET Platform.
@@ -73,7 +73,7 @@ Now that the ET RISCV Toolchain is installed in `/opt/et`, we can proceed to com
 Start by installing the required packages. For Ubuntu 24.04, the command is:
 
 ```
-  $ sudo apt-get install
+  $ sudo apt-get install \
       build-essential cmake pkg-config git \
       libjson-c-dev \
       libgtest-dev \
