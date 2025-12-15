@@ -153,20 +153,20 @@ void System::write_dmctrl(uint32_t value)
         return;
     }
 
-    if (SETRESETHALTREQ(newvalue) == 1) {
-        LOG_AGENT(DEBUG, noagent, "%s", "dmctrl: set HACTRL.resethalt");
-        for (unsigned neigh = 0; neigh < num_minion_neighs; ++neigh) {
-            const uint64_t mask = selected_neigh_harts(neigh);
-            neigh_esrs[neigh].hactrl |= (mask << 32);
-        }
-        return;
-    }
-
     if (CLRRESETHALTREQ(newvalue) == 1) {
         LOG_AGENT(DEBUG, noagent, "%s", "dmctrl: clear HACTRL.resethalt");
         for (unsigned neigh = 0; neigh < num_minion_neighs; ++neigh) {
             const uint64_t mask = selected_neigh_harts(neigh);
             neigh_esrs[neigh].hactrl &= ~(mask << 32);
+        }
+        return;
+    }
+
+    if (SETRESETHALTREQ(newvalue) == 1) {
+        LOG_AGENT(DEBUG, noagent, "%s", "dmctrl: set HACTRL.resethalt");
+        for (unsigned neigh = 0; neigh < num_minion_neighs; ++neigh) {
+            const uint64_t mask = selected_neigh_harts(neigh);
+            neigh_esrs[neigh].hactrl |= (mask << 32);
         }
         return;
     }
