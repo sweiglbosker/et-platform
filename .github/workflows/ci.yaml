@@ -42,3 +42,28 @@ jobs:
           BASE_DISTRO=${{ matrix.target.distro_name }}
           DISTRO_VERSION=${{ matrix.target.distro_version }}
           VERBOSE=1
+        outputs: type=docker,dest=${{ runner.temp }}/platform.tar
+    - name: Upload build image
+      uses: actions/upload-artifact@v4
+      with:
+        name: platform
+        path: ${{ runner.temp }}/platform.tar
+
+  test:
+    name: Test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: platform
+          path: ${{ runner.temp }}
+      - name: Load image
+        run: |
+          docker load --input ${{ runner.temp }}/platform.tar
+          # run `docker image ls`, just to see that it is there
+          docker image ls
+      - name: Run tests in docker
+        run: |
+          docker run --rm et-platform:latest /bin/bash -c "/opt/et/bin/it_test_code_loading"
