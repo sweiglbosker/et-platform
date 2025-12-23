@@ -133,17 +133,17 @@ static void hextostr(char* str, const char* hex)
 
 static inline void u32_to_hexstr(char* str, uint32_t value)
 {
-    sprintf(str, "%08" PRIx32, bswap32(value));
+    snprintf(str, 9, "%08" PRIx32, bswap32(value));
 }
 
 static inline void u64_to_hexstr(char* str, uint64_t value)
 {
-    sprintf(str, "%016" PRIx64, bswap64(value));
+    snprintf(str, 17, "%016" PRIx64, bswap64(value));
 }
 
 static inline void u64_to_hexstr_raw(char* str, uint64_t value)
 {
-    sprintf(str, "%016" PRIx64, value);
+    snprintf(str, 17, "%016" PRIx64, value);
 }
 
 static inline void freg_to_hexstr(char* str, bemu::freg_t freg)
@@ -325,7 +325,7 @@ static void target_continue(int thread)
 
 static void target_run(int thread, uint64_t start_pc, uint64_t end_pc)
 {
-    LOG_GDBSTUB(DEBUG, "run thread %d from 0x%010lx to 0x%010lx", thread, start_pc, end_pc);
+    LOG_GDBSTUB(DEBUG, "run thread %d from 0x%010" PRIx64 " to 0x%010" PRIx64, thread, start_pc, end_pc);
     g_sys_emu->thread_set_single_step(to_target_thread(thread), start_pc, end_pc);
     g_sys_emu->thread_set_running(to_target_thread(thread));
 }

@@ -268,7 +268,7 @@ void SysEmuImp::mmioWrite(uint64_t address, size_t size, const std::byte* src) {
     while (readSize > 0) {
       uint64_t device_addr, access_size;
       if (!iatuTranslate(chip_, pci_addr, size, device_addr, access_size)) {
-        LOG_AGENT(WARN, agent_, "iATU: Could not find translation for host address: 0x%" PRIx64 ", size: 0x%" PRIx64,
+        LOG_AGENT(WARN, agent_, "iATU: Could not find translation for host address: 0x%" PRIx64 ", size: 0x%zx",
                   pci_addr, size);
         iatusPrint(chip_);
         break;

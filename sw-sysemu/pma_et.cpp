@@ -74,7 +74,7 @@ static inline uint64_t truncated_dram_addr(const Hart& cpu, uint64_t addr)
     const uint64_t dram_size = cpu.chip->dram_size;
     const uint64_t naddr = 0x8000000000ULL + ((addr - 0x8000000000ULL) % dram_size);
     if (naddr != addr) {
-        WARN_HART(memory, cpu, "Truncating DRAM address: %010lx => %010lx", addr, naddr);
+        WARN_HART(memory, cpu, "Truncating DRAM address: %010" PRIx64 " => %010" PRIx64, addr, naddr);
     }
     return naddr;
 }
