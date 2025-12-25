@@ -60,8 +60,11 @@ htmlcov/
 .backup/
 
 # Docker files (don't copy into container)
-Dockerfile
-docker-compose.yaml
+docker/build.sh
+docker/docker-compose.yaml
+docker/Dockerfile
+docker/entrypoint.sh
+docker/run.sh
 .dockerignore
 
 # CI/CD
