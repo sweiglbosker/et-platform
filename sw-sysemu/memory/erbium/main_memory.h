@@ -41,17 +41,34 @@ struct MainMemory {
     using pointer       = typename MemoryRegion::pointer;
     using const_pointer = typename MemoryRegion::const_pointer;
 
-    // ----- Types -----
+private:
+    enum : unsigned {
+        erbreg_idx,
+        bootrom_idx,
+        sram_idx,
+        dram_idx,
+        sysreg_idx,
 
-    enum : unsigned long long {
-        // base addresses for the various regions of the address space
-        erbreg_base  = 0x0002000000ULL,
-        bootrom_base = 0x000200A000ULL,
-        sram_base    = 0x000200E000ULL,
-        dram_base    = 0x0040000000ULL, /* Actually MRAM */
-        sysreg_base  = 0x0080000000ULL,
+        REGION_COUNT
     };
 
+    constexpr static uint64_t region_bases[REGION_COUNT] = {
+        /* erbreg  */ 0x00'0200'0000ull,
+        /* bootrom */ 0x00'0200'A000ull,
+        /* sram    */ 0x00'0200'E000ull,
+        /* dram    */ 0x00'4000'0000ull,  /* Actually MRAM */
+        /* sysreg  */ 0x00'8000'0000ull,
+    };
+
+    constexpr static size_t region_sizes[REGION_COUNT] = {
+        /* erbreg  */ 4_KiB,
+        /* bootrom */ 8_KiB,
+        /* sram    */ 2_KiB,
+        /* dram    */ 16_MiB,
+        /* sysreg  */ 16_MiB,
+    };
+
+public:
     // ----- Public methods -----
 
     void reset();
@@ -107,7 +124,7 @@ protected:
     }
 
     // This array must be sorted by region base address
-    std::array<std::unique_ptr<MemoryRegion>, 4> regions{};
+    std::array<std::unique_ptr<MemoryRegion>, REGION_COUNT> regions{};
 };
 
 

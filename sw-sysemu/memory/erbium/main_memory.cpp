@@ -13,19 +13,16 @@ namespace bemu {
 
 void MainMemory::reset()
 {
-    size_t pos = 0;
-
-    regions[pos++].reset(new SysregsEr<erbreg_base>());
-    regions[pos++].reset(new DenseRegion<bootrom_base, 8_KiB, false>());
-    regions[pos++].reset(new DenseRegion<sram_base, 2_KiB>());
-    regions[pos++].reset(new DenseRegion<dram_base, 16_MiB>());
-    // TODO:
-    // regions[pos++].reset(new SysregRegion<sysreg_base, 16_MiB>());
+    regions[erbreg_idx].reset(new SysregsEr<region_bases[erbreg_idx]>());
+    regions[bootrom_idx].reset(new DenseRegion<region_bases[bootrom_idx], region_sizes[bootrom_idx], false>());
+    regions[sram_idx].reset(new DenseRegion<region_bases[sram_idx], region_sizes[sram_idx]>());
+    regions[dram_idx].reset(new DenseRegion<region_bases[dram_idx], region_sizes[dram_idx]>());
+    regions[sysreg_idx].reset(new SysregRegion<region_bases[sysreg_idx], region_sizes[sysreg_idx]>());
 }
 
 void MainMemory::wdt_clock_tick(const Agent& agent, uint64_t cycle)
 {
-    auto ptr = dynamic_cast<SysregsEr<erbreg_base>*>(regions[0].get());
+    auto ptr = dynamic_cast<SysregsEr<region_bases[erbreg_idx]>*>(regions[erbreg_idx].get());
     ptr->wdt_clock_tick(agent, cycle);
 }
 

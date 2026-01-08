@@ -592,8 +592,11 @@ void System::load_elf(std::istream& stream)
                          idx, sec->get_name().c_str(), vma, lma, sec->get_size(),
                          sec->get_type(), sec->get_flags());
 
+#if EMU_HAS_HIGH_MEMORY
+            // TODO: remove magic constant
             if (lma >= MainMemory::dram_base)
                 lma &= ~0x4000000000ULL;
+#endif
 
             memory.init(noagent, lma, sec->get_size(), sec->get_data());
         }
@@ -624,8 +627,11 @@ void System::load_raw(const char* filename, unsigned long long addr)
         std::streamsize count = file.gcount();
         if (count <= 0)
             break;
+#if EMU_HAS_HIGH_MEMORY
+        // TODO: remove magic constant
         if (addr >= MainMemory::dram_base)
             addr &= ~0x4000000000ULL;
+#endif
         memory.init(noagent, addr, count, reinterpret_cast<MainMemory::const_pointer>(fbuf));
         addr += count;
     }

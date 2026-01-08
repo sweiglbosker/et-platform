@@ -126,20 +126,13 @@ void System::write_dmctrl(uint32_t value)
         return;
     }
 
-    // resumereq goes from 1 to 0: clear HASTATUS0.resumeack
-    if (RESUMEREQ(oldvalue) == 1 && RESUMEREQ(newvalue) == 0) {
-        LOG_AGENT(DEBUG, noagent, "%s", "dmctrl: clear HASTATUS0.resumeack");
-        for (unsigned neigh = 0; neigh < num_minion_neighs; ++neigh) {
-            const uint64_t mask = selected_neigh_harts(neigh);
-            neigh_esrs[neigh].hastatus0 &= ~(mask << 32) | ~(0xFFFFull << 32);
-        }
-    }
-
     // haltreq is set: halt selected harts
     if (HALTREQ(newvalue)) {
         LOG_AGENT(DEBUG, noagent, "%s", "dmctrl: halt harts");
         // NB: This will also update HASTATUS0
         for_each_selected([](Hart& hart) { hart.enter_debug_mode(Debug_entry::Cause::haltreq); });
+        // NB: haltreq==0 (clear halt request) is not handled because halting is
+        // atomic in the emulator - there is no pending request to cancel.
         return;
     }
 

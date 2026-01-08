@@ -127,6 +127,7 @@ namespace bemu {
 // Main memory size (up to 32GiB)
 //
 #define EMU_DRAM_SIZE  (32ULL*1024ULL*1024ULL*1024ULL)
+#define EMU_HAS_HIGH_MEMORY 1
 
 #else
 #error "Architecture unspecified."

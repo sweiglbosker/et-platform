@@ -199,12 +199,11 @@ void shire_other_esrs_t::cold_reset(unsigned shireid)
 {
     (void) shireid;
     minion_feature = 0x01;
-    thread0_disable = 0xFE; // Can be overriden by OTP(?)
+    thread0_disable = 0xFE; // Only start minion 0 hart 0.
     thread1_disable = 0xFF;
     mtime_local_target = 0;
     clk_gate_ctrl = 0;
-    // TODO: no implemented yet
-    // debug_clk_gate_ctrl = 0;
+    debug_clk_gate_ctrl = 0;
     // time_config = 0x28;
     // sm_config = 0;
 }
@@ -386,14 +385,14 @@ uint64_t System::esr_read(const Agent& agent, uint64_t addr)
         case ESR_CLK_GATE_CTRL:
             return shire_other_esrs[shire].clk_gate_ctrl;
         case ESR_DEBUG_CLK_GATE_CTRL:
-            // TODO: new, no spec
-            return 0;
+            return shire_other_esrs[shire].debug_clk_gate_ctrl;
         case ESR_DMCTRL:
             return agent.chip->read_dmctrl();
         case ESR_SM_CONFIG:
-            // TODO: implement Status Monitor in debug module
+            // Status Monitor not implemented.
             return 0;
         case ESR_SM_TRIGGER:
+            // Status Monitor not implemented.
             return 0; // WARL
         case ESR_SM_MATCH:
         case ESR_SM_FILTER0:
@@ -401,7 +400,7 @@ uint64_t System::esr_read(const Agent& agent, uint64_t addr)
         case ESR_SM_FILTER2:
         case ESR_SM_DATA0:
         case ESR_SM_DATA1:
-            // TODO: implement Status Monitor in debug module
+            // Status Monitor not implemented.
             return 0;
         }
         WARN_AGENT(esrs, agent, "Read unknown shire_other ESR S%u:0x%" PRIx64, shireid(shire), esr);
@@ -683,10 +682,9 @@ void System::esr_write(const Agent& agent, uint64_t addr, uint64_t value)
                       shireid(shire), shire_other_esrs[shire].clk_gate_ctrl);
             return;
         case ESR_DEBUG_CLK_GATE_CTRL:
-            // TODO: implement
-            // shire_other_esrs[shire].debug_clk_gate_ctrl = uint8_t(value & 0x2);
-            // LOG_AGENT(DEBUG, agent, "S%u:debug_clk_gate_ctrl = 0x%" PRIx8,
-            //           shireid(shire), shire_other_esrs[shire].debug_clk_gate_ctrl);
+            shire_other_esrs[shire].debug_clk_gate_ctrl = uint8_t(value & 0x1);
+            LOG_AGENT(DEBUG, agent, "S%u:debug_clk_gate_ctrl = 0x%" PRIx8,
+                      shireid(shire), shire_other_esrs[shire].debug_clk_gate_ctrl);
             return;
         case ESR_DMCTRL:
             agent.chip->write_dmctrl(uint32_t(value & 0xF400'000F));
@@ -694,16 +692,8 @@ void System::esr_write(const Agent& agent, uint64_t addr, uint64_t value)
                       shireid(shire), uint32_t(value & 0xF400'000F));
             return;
         case ESR_SM_CONFIG:
-            // TODO: implement Status Monitor in debug module
-            // shire_other_esrs[shire].sm_config = uint16_t(value & 0xFFF);
-            // LOG_AGENT(DEBUG, agent, "S%u:sm_config = 0x%" PRIx16,
-            //           shireid(shire), shire_other_esrs[shire].sm_config);
-            return;
         case ESR_SM_TRIGGER:
-            // TODO: implement Status Monitor in debug module
-            // shire_other_esrs[shire].sm_trigger = uint8_t(value & 0x1);
-            // LOG_AGENT(DEBUG, agent, "S%u:sm_trigger = 0x%" PRIx8,
-            //           shireid(shire), shire_other_esrs[shire].sm_trigger);
+            // No-op - emulator has no low level state information.
             return;
         }
         WARN_AGENT(esrs, agent, "Write unknown shire_other ESR S%u:0x%" PRIx64, shireid(shire), esr);
@@ -754,7 +744,7 @@ void System::write_icache_prefetch(Privilege /*privilege*/, unsigned shire, uint
     (void)(value);
 #else
     if (!shire_other_esrs[shire].icache_prefetch_active) {
-        bool active = ((value >> 48) & 0xF) && shire_other_esrs[shire].shire_coop_mode;
+        bool active = shire_other_esrs[shire].shire_coop_mode;
         shire_other_esrs[shire].icache_prefetch_active = active;
     }
 #endif
