@@ -11,7 +11,7 @@
 #include <cstdint>
 #include "literals.h"
 #include "devices/DW_apb_timers.h"
-#include "devices/plic.h"
+#include "devices/plic_pu.h"
 #include "devices/uart.h"
 #include "memory/memory_error.h"
 #include "memory/memory_region.h"

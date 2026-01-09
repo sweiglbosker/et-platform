@@ -32,6 +32,9 @@ struct PLIC_Interrupt_Target {
     PLIC_Target_Notify notify;
 };
 
+//
+// A generic PLIC device.
+//
 // S = #sources, T = #targets
 template <unsigned long long Base, size_t N, size_t S, size_t T>
 struct PLIC : public MemoryRegion
@@ -211,10 +214,6 @@ private:
             *result32 = max_id[name_id];
             // To claim an interrupt, the target reads its Claim register
             if (max_id[name_id] > 0) {
-#if EMU_PLIC_SPEC_1_0_0
-                // RISC-V PLIC 1.0.0: Clear IP bit on claim
-                ip[max_id[name_id]] = false;
-#endif
                 in_flight[max_id[name_id]] = true;
                 // Save the ID of the Target that claimed the source interrupt
                 in_flight_by[max_id[name_id]] = name_id;
@@ -282,101 +281,6 @@ private:
     std::bitset<T>                eip;      // External Interrupt Pending (per target)
     std::array<uint32_t, T>       threshold; // Interrupt Threshold (per target)
     std::array<uint32_t, T>       max_id;    // Interrupt MaxID (per target)
-};
-
-#if EMU_HAS_PU
-template <unsigned long long Base, size_t N>
-struct PU_PLIC : public PLIC<Base, N, 41, 12>
-{
-    static void Target_Minion_Machine_external_interrupt(System* system, bool raise) {
-        for (int i = 0; i < EMU_NUM_MINION_SHIRES; i++) {
-            if (raise) {
-                system->raise_machine_external_interrupt(i);
-            } else {
-                system->clear_machine_external_interrupt(i);
-            }
-        }
-    }
-
-    static void Target_Minion_Supervisor_external_interrupt(System* system, bool raise) {
-        for (int i = 0; i < EMU_NUM_MINION_SHIRES; i++) {
-            if (raise) {
-                system->raise_supervisor_external_interrupt(i);
-            } else {
-                system->clear_supervisor_external_interrupt(i);
-            }
-        }
-    }
-
-    const std::vector<PLIC_Interrupt_Target> &get_target_list() const {
-        static const std::vector<PLIC_Interrupt_Target> targets = {
-            {10, 0x21, Target_Minion_Machine_external_interrupt},
-            {11, 0x20, Target_Minion_Supervisor_external_interrupt},
-        };
-        return targets;
-    }
-};
-#endif // EMU_HAS_PU
-
-#if EMU_HAS_SPIO
-template <unsigned long long Base, size_t N>
-struct SP_PLIC : public PLIC<Base, N, 148, 2>
-{
-    static void Target_SP_Machine_external_interrupt(System* system, bool raise) {
-        if (raise) {
-            system->raise_machine_external_interrupt(IO_SHIRE_ID);
-        } else {
-            system->clear_machine_external_interrupt(IO_SHIRE_ID);
-        }
-    }
-
-    static void Target_SP_Supervisor_external_interrupt(System* system, bool raise) {
-        if (raise) {
-            system->raise_supervisor_external_interrupt(IO_SHIRE_ID);
-        } else {
-            system->clear_supervisor_external_interrupt(IO_SHIRE_ID);
-        }
-    }
-
-    const std::vector<PLIC_Interrupt_Target> &get_target_list() const {
-        static const std::vector<PLIC_Interrupt_Target> targets = {
-            {0, 0, Target_SP_Machine_external_interrupt},
-            {1, 1, Target_SP_Supervisor_external_interrupt},
-        };
-        return targets;
-    }
-};
-#endif // EMU_HAS_SPIO
-
-// Erbium PLIC: 32 interrupt sources, 2 targets (M-mode and S-mode)
-template <unsigned long long Base, size_t N>
-struct ER_PLIC : public PLIC<Base, N, 32, 2>
-{
-    static void Target_Machine_external_interrupt(System* system, bool raise) {
-        if (raise) {
-            system->raise_machine_external_interrupt(0);
-        } else {
-            system->clear_machine_external_interrupt(0);
-        }
-    }
-
-    static void Target_Supervisor_external_interrupt(System* system, bool raise) {
-        if (raise) {
-            system->raise_supervisor_external_interrupt(0);
-        } else {
-            system->clear_supervisor_external_interrupt(0);
-        }
-    }
-
-    const std::vector<PLIC_Interrupt_Target> &get_target_list() const override {
-        static const std::vector<PLIC_Interrupt_Target> targets = {
-            // name_id, address_id, notify callback
-            // Context 0 = M-mode, Context 1 = S-mode
-            {0, 0, Target_Machine_external_interrupt},
-            {1, 1, Target_Supervisor_external_interrupt},
-        };
-        return targets;
-    }
 };
 
 } // namespace bemu

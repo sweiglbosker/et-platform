@@ -23,7 +23,7 @@
 #include "devices/i2c.h"
 #include "devices/pcie_apb_subsys.h"
 #include "devices/pcie_esr.h"
-#include "devices/plic.h"
+#include "devices/plic_sp.h"
 #include "devices/pll.h"
 #include "devices/shire_lpddr.h"
 #include "devices/spi.h"

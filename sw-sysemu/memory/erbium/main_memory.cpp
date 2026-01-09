@@ -5,7 +5,7 @@
 
 #include "memory/erbium/main_memory.h"
 #include "emu_defines.h"
-#include "devices/plic.h"
+#include "devices/plic_er.h"
 #include "devices/sysregs_er.h"
 #include "system.h"
 #include "memory/sysreg_region.h"
