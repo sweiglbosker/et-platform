@@ -1753,32 +1753,35 @@ void tensor_reduce_start(Hart& cpu, uint64_t value)
     }
 
     Command  command  = static_cast<Command>(value & 3);
+    unsigned target_minion = (value >> 3) & 0x1FFF;
     unsigned height   = (value >> 3) & 0xF;
     unsigned distance = 1 << height;
     unsigned minmask  = (1 << (height + 1)) - 1;
     unsigned minion   = core_index(cpu);
 
-#if EMU_HAS_TENSOR_REDUCE_VALIDATION
-    // Validate sender/receiver ID and tree_depth limits
-    if (command == Command::send || command == Command::receive) {
-        unsigned target_minion = (value >> 3) & 0x1FFF;
-        if (target_minion > EMU_TENSOR_REDUCE_MAX_MINION_ID) {
+    // Validate sender/receiver target/height.
+    switch(command) {
+    case Command::send:
+    case Command::receive:
+        if (target_minion > EMU_TREDUCE_MAX_MINION) {
             LOG_HART(DEBUG, cpu, "\t%s(fail) invalid minion id: %u",
                      reducecmd[static_cast<int>(command)], target_minion);
             update_tensor_error(cpu, 1 << 9);
             L1_SCP_CHECK_START(cpu, tensor_op_type::TensorReduce, true);
             return;
         }
-    } else {
-        if (height > EMU_TENSOR_REDUCE_MAX_HEIGHT) {
+        break;
+    case Command::broadcast:
+    case Command::reduce:
+        if (height > EMU_TREDUCE_MAX_HEIGHT) {
             LOG_HART(DEBUG, cpu, "\t%s(fail) invalid tree_depth: %u",
                      reducecmd[static_cast<int>(command)], height);
             update_tensor_error(cpu, 1 << 9);
             L1_SCP_CHECK_START(cpu, tensor_op_type::TensorReduce, true);
             return;
         }
+        break;
     }
-#endif
 
     TReduce& reduce = cpu.core->reduce;
 
