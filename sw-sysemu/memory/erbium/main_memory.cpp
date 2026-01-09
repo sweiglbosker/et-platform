@@ -61,17 +61,17 @@ void MainMemory::rvtimer_write_mtimecmp(const Agent& agent, uint64_t value) {
 void MainMemory::rvtimer_reset() {
     rvtimer().reset();
 }
- 
+
 void MainMemory::plic_interrupt_pending_set(const Agent& agent, uint32_t source)
 {
     auto ptr = dynamic_cast<ER_PLIC<region_bases[plic_idx], region_sizes[plic_idx]>*>(regions[plic_idx].get());
     ptr->interrupt_pending_set(agent, source);
 }
- 
+
 void MainMemory::plic_interrupt_pending_clear(const Agent& agent, uint32_t source)
 {
     auto ptr = dynamic_cast<ER_PLIC<region_bases[plic_idx], region_sizes[plic_idx]>*>(regions[plic_idx].get());
     ptr->interrupt_pending_clear(agent, source);
 }
- 
+
 } // namespace bemu
