@@ -33,8 +33,11 @@ ARG VERBOSE
 # Copy the RISC-V GNU Toolchain from the previous stage
 COPY --from=toolchain_builder ${ET_INSTALL_DIR} ${ET_INSTALL_DIR}
 
+# Update package list from sources
+RUN apt-get update
+
 # Install ET Platform build dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get install -y \
     cmake \
     dos2unix \
     gcc \
@@ -59,8 +62,7 @@ RUN apt-get update && apt-get install -y \
     python3-breathe \
     python3-jsonschema \
     libfmt-dev \
-    xxd \
-    && rm -rf /var/lib/apt/lists/*
+    xxd
 
 # Set working directory for the ET Platform source
 WORKDIR /workspace
@@ -84,6 +86,23 @@ RUN cmake \
 # Build the ET Platform (use ARG to allow override)
 ARG BUILD_JOBS=4
 RUN make ${VERBOSE:+VERBOSE=1} -j${BUILD_JOBS}
+
+# Optional tools for developers working inside of the docker.
+#
+# It is fine to add new fancy tools here as long as we keep these packages
+# apart from those listed above, so packages that strictly are build
+# dependencies are not mixed with optionals.
+#
+# Besides, installing these packages has to be one of the last steps in the
+# docker image build, so the list of optionals can be updated frequently
+# without retriggering the bulk of the build for every user.
+RUN apt-get install -y \
+    sudo \
+    vim \
+    ccache
+
+# Clean up package lists
+RUN rm -rf /var/lib/apt/lists/*
 
 # Set the default working directory
 WORKDIR /workspace

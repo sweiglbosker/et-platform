@@ -3,4 +3,4 @@
 set -e
 set -x
 
-docker build -t et-platform -f docker/Dockerfile .
+docker build --build-arg BUILD_JOBS=$(nproc) -t et-platform -f docker/Dockerfile .
