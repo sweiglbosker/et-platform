@@ -115,11 +115,11 @@ struct SvcProcRegion : public MemoryRegion {
     // Members
     DenseRegion   <sp_rom_base, 128_KiB, false>  sp_rom{};
     SparseRegion  <sp_sram_base, 1_MiB, 64_KiB>  sp_sram{};
-    SP_PLIC       <sp_plic_base,    32_MiB>      sp_plic{};
     Uart          <sp_uart0_base,  4_KiB>        spio_uart0{};
     Uart          <sp_uart1_base,  4_KiB>        spio_uart1{};
     SpioMiscRegion                               sp_misc{};
 #ifdef SYS_EMU
+    SP_PLIC       <sp_plic_base,    32_MiB>      sp_plic{};
     DW_apb_timers <sp_timer_base,    4_KiB>      sp_timer{};
     Efuse         <sp_efuse_base,    8_KiB>      sp_efuse{};
     Cru           <sp_cru_base,      4_KiB>      sp_cru{};
@@ -191,10 +191,9 @@ protected:
         &shire_lppdr
     }};
 #else
-    std::array<MemoryRegion*,6> regions = {{
+    std::array<MemoryRegion*,5> regions = {{
         &sp_rom,
         &sp_sram,
-        &sp_plic,
         &spio_uart0,
         &sp_misc,
         &spio_uart1,

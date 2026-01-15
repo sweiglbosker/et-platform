@@ -160,7 +160,7 @@ public:
     void tick_peripherals(uint64_t cycle);
     bool timers_active(void);
 
-#if EMU_HAS_SVCPROC
+#if EMU_HAS_SVCPROC && defined(SYS_EMU)
     // Interrupts
     void sp_plic_interrupt_pending_set(uint32_t source_id);
     void sp_plic_interrupt_pending_clear(uint32_t source_id);
@@ -438,7 +438,7 @@ inline int System::pu_uart1_get_tx_fd() const
 }
 #endif // EMU_HAS_PU
 
-#if EMU_HAS_SVCPROC
+#if EMU_HAS_SVCPROC && defined(SYS_EMU)
 
 inline void System::sp_plic_interrupt_pending_set(uint32_t source_id)
 {
@@ -451,7 +451,7 @@ inline void System::sp_plic_interrupt_pending_clear(uint32_t source_id)
     memory.sp_plic_interrupt_pending_clear(noagent, source_id);
 }
 
-#endif // EMU_HAS_SVCPROC
+#endif // EMU_HAS_SVCPROC && SYS_EMU
 
 #if EMU_HAS_SPIO
 

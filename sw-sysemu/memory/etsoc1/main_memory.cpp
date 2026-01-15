@@ -48,6 +48,7 @@ void MainMemory::pu_plic_interrupt_pending_clear(const Agent& agent, uint32_t so
 }
 
 
+#ifdef SYS_EMU
 void MainMemory::sp_plic_interrupt_pending_set(const Agent& agent, uint32_t source)
 {
     auto ptr = dynamic_cast<SvcProcRegion<spio_base>*>(regions[3].get());
@@ -60,6 +61,7 @@ void MainMemory::sp_plic_interrupt_pending_clear(const Agent& agent, uint32_t so
     auto ptr = dynamic_cast<SvcProcRegion<spio_base>*>(regions[3].get());
     ptr->sp_plic.interrupt_pending_clear(agent, source);
 }
+#endif
 
 
 void MainMemory::pu_uart0_set_rx_fd(int fd)

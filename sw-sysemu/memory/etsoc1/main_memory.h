@@ -143,8 +143,10 @@ struct MainMemory {
     // Access the PLICs
     void pu_plic_interrupt_pending_set(const Agent&, uint32_t source);
     void pu_plic_interrupt_pending_clear(const Agent&, uint32_t source);
+#ifdef SYS_EMU
     void sp_plic_interrupt_pending_set(const Agent&, uint32_t source);
     void sp_plic_interrupt_pending_clear(const Agent&, uint32_t source);
+#endif
 
     // Access the UARTs
     void pu_uart0_set_rx_fd(int fd);

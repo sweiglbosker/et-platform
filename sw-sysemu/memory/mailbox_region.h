@@ -419,6 +419,7 @@ protected:
         }
     }
 
+#ifdef SYS_EMU
     void mm_to_sp_interrupt_check_trigger(System* system) {
         if (mm_to_sp_interrupt_reg != 0) {
             system->sp_plic_interrupt_pending_set(SPIO_PLIC_MBOX_MMIN_INTR_ID);
@@ -434,6 +435,10 @@ protected:
             system->sp_plic_interrupt_pending_clear(SPIO_PLIC_MBOX_HOST_INTR_ID);
         }
     }
+#else
+    void mm_to_sp_interrupt_check_trigger(System*) {}
+    void host_to_sp_interrupt_check_trigger(System*) {}
+#endif
 
     static inline bool above(const MemoryRegion* lhs, size_type rhs) {
         return lhs->last() < rhs;
