@@ -1,6 +1,7 @@
-# Copyright (c) 2025 Ainekko, Co.
+# Copyright (c) 2026 Ainekko, Co.
 # SPDX-License-Identifier: Apache-2.0
 
+# Headers
 emu_hdrs := \
 	atomics.h \
 	cache.h \
@@ -10,20 +11,14 @@ emu_hdrs := \
 	devices/cru.h \
 	devices/efuse.h \
 	devices/i2c.h \
-	devices/pcie_apb_subsys.h \
-	devices/pcie_dbi_slv.h \
-	devices/pcie_dma.h \
-	devices/pcie_esr.h \
-	devices/pcie_nopcie_esr.h \
-	devices/pcie_usr_esr.h \
-	devices/plic.h \
+	devices/plic_dev.h \
+	devices/plic_er.h \
 	devices/pll.h \
 	devices/rvtimer.h \
-	devices/shire_lpddr.h \
 	devices/spi.h \
-	devices/spio_misc_region.h \
-	devices/spio_rvtimer_region.h \
+	devices/sysregs_er.h \
 	devices/uart.h \
+	devices/watchdog.h \
 	emu_defines.h \
 	emu_gio.h \
 	esrs.h \
@@ -53,13 +48,13 @@ emu_hdrs := \
 	traps.h \
 	utility.h
 
+# Sources
 emu_cpp_srcs := \
 	agent.cpp \
 	debugmodule.cpp \
-	devices/pcie_dma.cpp \
-	devices/spio_misc_region.cpp \
+	devices/sysregs_er.cpp \
 	emu_gio.cpp \
-	esrs_et.cpp \
+	esrs_er.cpp \
 	flb.cpp \
 	gold.cpp \
 	insns/arith.cpp \
@@ -90,6 +85,6 @@ emu_cpp_srcs := \
 	memory/main_memory.cpp \
 	mmu.cpp \
 	msgport.cpp \
-	pma_et.cpp \
+	pma_er.cpp \
 	processor.cpp \
 	system.cpp
