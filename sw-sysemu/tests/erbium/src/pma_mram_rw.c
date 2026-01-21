@@ -10,8 +10,8 @@
 #include "test.h"
 #include <stdint.h>
 
-#define MRAM_BASE 0x4000'0000ull
-#define TEST_PATTERN 0xDEAD'BEEF'CAFE'FEEDull
+#define MRAM_BASE 0x40000000ull
+#define TEST_PATTERN 0xDEADBEEFCAFEFEEDull
 
 int main() {
     volatile uint64_t *mram = (volatile uint64_t *)MRAM_BASE;

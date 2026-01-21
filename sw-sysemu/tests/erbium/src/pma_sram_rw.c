@@ -11,8 +11,8 @@
 #include <stdint.h>
 
 /* SRAM region: 0x0200E000 - 0x0200E7FF (2KB) */
-#define SRAM_BASE 0x0200'E000ull
-#define TEST_PATTERN 0xCAFE'FEED'DEAD'BEEFull
+#define SRAM_BASE 0x0200E000ull
+#define TEST_PATTERN 0xCAFEFEEDDEADBEEFull
 
 int main() {
     volatile uint64_t *sram = (volatile uint64_t *)SRAM_BASE;

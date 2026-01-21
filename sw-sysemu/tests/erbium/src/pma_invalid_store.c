@@ -11,13 +11,13 @@
 #include "test.h"
 #include "trap.h"
 
-#define INVALID_ADDR 0x1000'0000ull
+#define INVALID_ADDR 0x10000000ull
 
 int main() {
     expect_exception(CAUSE_STORE_ACCESS_FAULT);
 
     volatile uint64_t *invalid = (volatile uint64_t *)INVALID_ADDR;
-    *invalid = 0xDEAD'BEEF;
+    *invalid = 0xDEADBEEF;
 
     TEST_FAIL;
     return 0;

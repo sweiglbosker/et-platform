@@ -54,12 +54,12 @@ private:
     };
 
     constexpr static uint64_t region_bases[REGION_COUNT] = {
-        /* erbreg  */ 0x00'0200'0000ull,
-        /* bootrom */ 0x00'0200'A000ull,
-        /* sram    */ 0x00'0200'E000ull,
-        /* dram    */ 0x00'4000'0000ull,  /* Actually MRAM */
-        /* sysreg  */ 0x00'8000'0000ull,
-        /* plic    */ 0x00'C000'0000ull,
+        /* erbreg  */ 0x0002000000ull,
+        /* bootrom */ 0x000200A000ull,
+        /* sram    */ 0x000200E000ull,
+        /* dram    */ 0x0040000000ull,  /* Actually MRAM */
+        /* sysreg  */ 0x0080000000ull,
+        /* plic    */ 0x00C0000000ull,
     };
 
     constexpr static size_t region_sizes[REGION_COUNT] = {

@@ -13,7 +13,7 @@
 #include "test.h"
 #include "trap.h"
 
-#define ESR_BASE 0x8000'0000ull
+#define ESR_BASE 0x80000000ull
 
 int main() {
     expect_exception(CAUSE_LOAD_ACCESS_FAULT);

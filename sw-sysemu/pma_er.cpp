@@ -27,31 +27,31 @@ namespace bemu {
 //   0xC000_0000 - 0xC3FF_FFFF: PLIC (64M)
 
 static inline bool paddr_is_sysreg(uint64_t addr)
-{ return (addr >= 0x0200'0000ull) && (addr < 0x0200'1000ull); }
+{ return (addr >= 0x02000000ull) && (addr < 0x02001000ull); }
 
 static inline bool paddr_is_mramreg(uint64_t addr)
-{ return (addr >= 0x0200'1000ull) && (addr < 0x0200'2000ull); }
+{ return (addr >= 0x02001000ull) && (addr < 0x02002000ull); }
 
 static inline bool paddr_is_periph(uint64_t addr)
-{ return (addr >= 0x0200'2000ull) && (addr < 0x0200'3000ull); }
+{ return (addr >= 0x02002000ull) && (addr < 0x02003000ull); }
 
 static inline bool paddr_is_hyperbus(uint64_t addr)
-{ return (addr >= 0x0200'3000ull) && (addr < 0x0200'4000ull); }
+{ return (addr >= 0x02003000ull) && (addr < 0x02004000ull); }
 
 static inline bool paddr_is_bootrom(uint64_t addr)
-{ return (addr >= 0x0200'A000ull) && (addr < 0x0200'C000ull); }
+{ return (addr >= 0x0200A000ull) && (addr < 0x0200C000ull); }
 
 static inline bool paddr_is_sram(uint64_t addr)
-{ return (addr >= 0x0200'E000ull) && (addr < 0x0200'E800ull); }
+{ return (addr >= 0x0200E000ull) && (addr < 0x0200E800ull); }
 
 static inline bool paddr_is_mram(uint64_t addr)
-{ return (addr >= 0x4000'0000ull) && (addr < 0x8000'0000ull); }
+{ return (addr >= 0x40000000ull) && (addr < 0x80000000ull); }
 
 static inline bool paddr_is_esr(uint64_t addr)
-{ return (addr >= 0x8000'0000ull) && (addr < 0xC000'0000ull); }
+{ return (addr >= 0x80000000ull) && (addr < 0xC0000000ull); }
 
 static inline bool paddr_is_plic(uint64_t addr)
-{ return (addr >= 0xC000'0000ull) && (addr < 0xC400'0000ull); }
+{ return (addr >= 0xC0000000ull) && (addr < 0xC4000000ull); }
 
 
 static bool data_access_is_write(mem_access_type macc)

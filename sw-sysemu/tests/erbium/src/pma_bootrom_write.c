@@ -12,7 +12,7 @@
 #include "trap.h"
 
 /* Bootrom region: 0x0200A000 - 0x0200BFFF (8KB, read-only) */
-#define BOOTROM_BASE 0x0200'A000ull
+#define BOOTROM_BASE 0x0200A000ull
 
 int main() {
     expect_exception(CAUSE_STORE_ACCESS_FAULT);

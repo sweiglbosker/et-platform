@@ -23,39 +23,39 @@ namespace bemu {
 //   bits 21-0: address within ESR space
 
 // ESR region 'pp' field in bits [23:22] - used by pma_et.cpp
-#define ESR_REGION_PROT_MASK    0x00C0'0000ull
+#define ESR_REGION_PROT_MASK    0x00C00000ull
 #define ESR_REGION_PROT_SHIFT   22
 
 // Base address and size of ESR region - used by memory/sysreg_region.h
 // Base: bit 31 = 1, all else = 0 -> 0x80000000
 // Size: 24 bits of address space (including PP) -> 0x01000000 (16MB)
-#define ESR_REGION_BASE         0x8000'0000ull
-#define ESR_REGION_SIZE         0x0100'0000ull
+#define ESR_REGION_BASE         0x80000000ull
+#define ESR_REGION_SIZE         0x01000000ull
 
 // Hart ESR addresses used by processor.cpp for debug/program buffer
 // Base 0x80000000 + PP=2 (debug) at bits 23:22 (0x00800000) + offset
-#define ESR_AXPROGBUF0          0x8080'07A0ull
-#define ESR_AXPROGBUF1          0x8080'07A8ull
-#define ESR_NXPROGBUF0          0x8080'07B0ull
-#define ESR_NXPROGBUF1          0x8080'07B8ull
-#define ESR_ABSCMD              0x8080'07C0ull
+#define ESR_AXPROGBUF0          0x808007A0ull
+#define ESR_AXPROGBUF1          0x808007A8ull
+#define ESR_NXPROGBUF0          0x808007B0ull
+#define ESR_NXPROGBUF1          0x808007B8ull
+#define ESR_ABSCMD              0x808007C0ull
 
 #elif EMU_ETSOC1
 
 // ESR region 'pp' field in bits [31:30] - used by pma_et.cpp
-#define ESR_REGION_PROT_MASK    0x00'C000'0000ull
+#define ESR_REGION_PROT_MASK    0x00C0000000ull
 #define ESR_REGION_PROT_SHIFT   30
 
 // Base address and size of ESR region - used by memory/sysreg_region.h
-#define ESR_REGION_BASE         0x01'0000'0000ull
-#define ESR_REGION_SIZE         0x01'0000'0000ull
+#define ESR_REGION_BASE         0x0100000000ull
+#define ESR_REGION_SIZE         0x0100000000ull
 
 // Hart ESR addresses used by processor.cpp for debug/program buffer
-#define ESR_AXPROGBUF0          0x01'8000'07A0ull
-#define ESR_AXPROGBUF1          0x01'8000'07A8ull
-#define ESR_NXPROGBUF0          0x01'8000'07B0ull
-#define ESR_NXPROGBUF1          0x01'8000'07B8ull
-#define ESR_ABSCMD              0x01'8000'07C0ull
+#define ESR_AXPROGBUF0          0x01800007A0ull
+#define ESR_AXPROGBUF1          0x01800007A8ull
+#define ESR_NXPROGBUF0          0x01800007B0ull
+#define ESR_NXPROGBUF1          0x01800007B8ull
+#define ESR_ABSCMD              0x01800007C0ull
 
 #endif
 
