@@ -201,7 +201,7 @@ void shire_other_esrs_t::cold_reset(unsigned shireid)
     minion_feature = 0x01;
     thread0_disable = 0xFE; // Only start minion 0 hart 0.
     thread1_disable = 0xFF;
-    mtime_local_target = 0;
+    mtime_local_target = 0xFFFF;
     clk_gate_ctrl = 0;
     debug_clk_gate_ctrl = 0;
     // sm_config = 0;
